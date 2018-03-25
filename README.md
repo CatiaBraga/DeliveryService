@@ -6,7 +6,7 @@ O projecto escolhido para implementar foi Delivery Service. A implementação es
 - https://github.com/CatiaBraga/DeliveryServiceClient
 - https://github.com/CatiaBraga/DataGenerator
 
-Este repositório em particular contém os DDL das tabelas necessárias, no ficheiro tables_DDL.sql. O RDBMS escolhido foi MySQL.
+Este repositório contém os DDL das tabelas necessárias, no ficheiro tables_DDL.sql. O RDBMS escolhido foi MySQL.
 
 Todos os projectos foram implementados em Java, utilizando NetBeans 8.1 como IDE, Java 8 e Apache Tomcat 8.0.50.
 
