@@ -21,6 +21,7 @@ import objects.City;
 import objects.Destination;
 import objects.User;
 import utils.ConnectionManager;
+import utils.Message;
 
 /**
  *
@@ -54,11 +55,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
         
@@ -70,7 +71,7 @@ public class RequestReceiver {
             City c = entry.getValue();
 
             if(c.getName().equals(cityName)){
-                return "Duplicate found";
+                return Message.DUPLICATE_FOUND;
             }
         }
 
@@ -105,9 +106,9 @@ public class RequestReceiver {
             cities.put(id, new City(id, cityName, null));
         }
         else
-            return "Cannot fetch auto-generated id";
+            return Message.CANNOT_FETCH_AUTO_ID;
         
-        return "City has been inserted";
+        return Message.CITY_INSERT_SUCCESS;
     }
     
     public String requestReadCity(String cityName){
@@ -130,12 +131,12 @@ public class RequestReceiver {
         }
 
         if(cityOrigin == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
         
         StringBuilder sb = new StringBuilder();
         sb.append(cityName);
-        sb.append(" - City found");
+        sb.append(Message.CITY_FOUND);
         
         return sb.toString();
     }
@@ -147,11 +148,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
                 
@@ -179,7 +180,7 @@ public class RequestReceiver {
         }
 
         if(hasDuplicate || cityOrigin == null){
-            return "City can't be updated";
+            return Message.CITY_CANT_UPDATE;
         }
 
         try(Connection conn = connManager.fetchConnection();){
@@ -200,7 +201,7 @@ public class RequestReceiver {
 
         cities.get(cityOrigin.getId()).setName(newCityName);
         
-        return "City updated successfully";
+        return Message.CITY_UPDATE_SUCCESS;
     }
     
     public String requestDeleteCity(String username, String cityName){
@@ -210,11 +211,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
 
@@ -232,7 +233,7 @@ public class RequestReceiver {
         }
 
         if(cityOrigin == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
 
         try(Connection conn = connManager.fetchConnection();){
@@ -276,7 +277,7 @@ public class RequestReceiver {
 
         cities.remove(cityOrigin.getId());
 
-        return "City has been deleted";
+        return Message.CITY_DELETE_SUCCESS;
     }
 
     
@@ -290,11 +291,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
 
@@ -325,7 +326,7 @@ public class RequestReceiver {
         }
 
         if(!foundOrigin || !foundDestination || cityOrigin == null || cityDestination == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
 
         if(cityOrigin.getDestinations() != null && !cityOrigin.getDestinations().isEmpty()){
@@ -333,7 +334,7 @@ public class RequestReceiver {
 
             while(findExistingRoute.hasNext()){
                 if(findExistingRoute.next().getId() == cityDestination.getId()){
-                    return "Route already exists, won't be created";
+                    return Message.ROUTE_DUPLICATE;
                 }
             }
         }
@@ -365,7 +366,7 @@ public class RequestReceiver {
 
         cityOrigin.getDestinations().add(toBeInserted);
 
-        return "Route inserted successfully";
+        return Message.ROUTE_INSERT_SUCCESS;
 
     }
     
@@ -402,7 +403,7 @@ public class RequestReceiver {
         }
 
         if(!foundOrigin && !foundDestination || cityOrigin == null || cityDestination == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
 
         if(cityOrigin.getDestinations() != null && !cityOrigin.getDestinations().isEmpty()){
@@ -426,7 +427,7 @@ public class RequestReceiver {
                 }
             }
         }
-        return "Route not found";
+        return Message.ROUTE_NOT_FOUND;
     }
     
     public String requestUpdateRoute(String username, String origin, String destination, int time, int cost){
@@ -436,11 +437,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
 
@@ -471,7 +472,7 @@ public class RequestReceiver {
         }
 
         if(!foundOrigin && !foundDestination || cityOrigin == null || cityDestination == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
 
         if(cityOrigin.getDestinations() != null && !cityOrigin.getDestinations().isEmpty()){
@@ -503,12 +504,12 @@ public class RequestReceiver {
                     checkForDestination.setTime(time);
                     checkForDestination.setCost(cost);
 
-                    return "Route updated successfully";
+                    return Message.ROUTE_UPDATE_SUCCESS;
                 }
             }
         }
 
-    return "Route not found";
+        return Message.ROUTE_NOT_FOUND;
     }
     
     public String requestDeleteRoute(String username, String origin, String destination){
@@ -518,11 +519,11 @@ public class RequestReceiver {
         }
         
         if(!users.containsKey(username)){
-            return "User not found";
+            return Message.USER_NOT_FOUND;
         }
         else{
             if(!users.get(username).isAdmin()){
-                return "User is not admin. Permission denied.";
+                return Message.USER_NOT_ADMIN;
             }
         }
 
@@ -553,7 +554,7 @@ public class RequestReceiver {
         }
 
         if(!foundOrigin && !foundDestination || cityOrigin == null || cityDestination == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
 
         if(cityOrigin.getDestinations() != null && !cityOrigin.getDestinations().isEmpty()){
@@ -581,12 +582,12 @@ public class RequestReceiver {
 
                     cityOrigin.getDestinations().remove(checkForDestination);
 
-                    return "Route deleted successfully";
+                    return Message.ROUTE_DELETE_SUCCESS;
                 }
             }
         }
 
-        return "Route not found";
+        return Message.ROUTE_NOT_FOUND;
     }
     
     //SHORTEST PATH
@@ -624,17 +625,17 @@ public class RequestReceiver {
         }
         
         if(!foundOrigin && !foundDestination || cityOrigin == null || cityDestination == null){
-            return "City not found";
+            return Message.CITY_NOT_FOUND;
         }
         
         if(!measure.equals("time") && !measure.equals("cost")){
-            return "Measure not suitable";
+            return Message.MEASURE_NOT_SUITABLE;
         }
         
         ArrayList<City> getPath = new Dijkstra().getBestRoute(cityOrigin.getId(), cityDestination.getId(), measure, cities);
         
         if(getPath == null){
-            return "Can't find a route between the cities";
+            return Message.CANT_FIND_ROUTE;
         }
         else{
             StringBuilder sb = new StringBuilder();
